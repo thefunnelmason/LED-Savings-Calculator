@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brilled Lighting - LED Savings Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; background-color: #f4f4f4; }
+        .container { 
+            max-width: 400px; 
+            margin: auto; 
+            padding: 20px; 
+            background: #fff; 
+            border-radius: 10px; 
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
+        }
+        input { width: 100%; padding: 8px; margin: 10px 0; }
+        button { 
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: #fff; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .result { margin-top: 20px; font-weight: bold; }
+        .logo { width: 150px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://yourlogo-url.com/logo.png" alt="Brilled Lighting Logo" class="logo">
+        <h2>Brilled Lighting - LED Savings Calculator</h2>
+        <label>Current Wattage per Fixture:</label>
+        <input type="number" id="wattage" placeholder="e.g. 400">
+        
+        <label>Number of Fixtures:</label>
+        <input type="number" id="fixtures" placeholder="e.g. 50">
+        
+        <label>Hours of Operation per Day:</label>
+        <input type="number" id="hours" placeholder="e.g. 10">
+        
+        <label>Cost per kWh ($):</label>
+        <input type="number" id="cost" step="0.01" placeholder="e.g. 0.12">
+        
+        <label>New LED Wattage per Fixture:</label>
+        <input type="number" id="ledWattage" placeholder="e.g. 100">
+        
+        <label>Rebate Amount ($):</label>
+        <input type="number" id="rebate" placeholder="Optional">
+        
+        <button onclick="calculateSavings()">Calculate Savings</button>
+        
+        <div class="result" id="output"></div>
+    </div>
+
+    <script>
+        function calculateSavings() {
+            let wattage = parseFloat(document.getElementById('wattage').value);
+            let fixtures = parseFloat(document.getElementById('fixtures').value);
+            let hours = parseFloat(document.getElementById('hours').value);
+            let cost = parseFloat(document.getElementById('cost').value);
+            let ledWattage = parseFloat(document.getElementById('ledWattage').value);
+            let rebate = parseFloat(document.getElementById('rebate').value) || 0;
+            
+            if (isNaN(wattage) || isNaN(fixtures) || isNaN(hours) || isNaN(cost) || isNaN(ledWattage)) {
+                document.getElementById('output').innerHTML = "Please fill in all required fields.";
+                return;
+            }
+            
+            let oldEnergyUsage = (wattage * fixtures * hours * 30) / 1000; // kWh per month
+            let newEnergyUsage = (ledWattage * fixtures * hours * 30) / 1000;
+            let savings = (oldEnergyUsage - newEnergyUsage) * cost;
+            let annualSavings = savings * 12;
+            let paybackPeriod = rebate > 0 ? (rebate / annualSavings).toFixed(2) : "N/A";
+            
+            document.getElementById('output').innerHTML = 
+                `Estimated Monthly Savings: $${savings.toFixed(2)}<br>
+                 Estimated Annual Savings: $${annualSavings.toFixed(2)}<br>
+                 Payback Period: ${paybackPeriod} years`;
+        }
+    </script>
+</body>
+</html>
